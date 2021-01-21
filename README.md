@@ -32,11 +32,11 @@ Design the following database schema containing three tables:
 
 Build a command-line application that at a minimum allows the user to:
 
-- Add departments, roles, employees
+- _Add departments, roles, employees_
 
-- View departments, roles, employees
+- _View departments, roles, employees_
 
-- Update employee roles
+- _Update employee roles_
 
 Bonus points if you're able to:
 
@@ -82,17 +82,17 @@ How do you deliver this? Here are some guidelines:
 
 ## Minimum Requirements
 
-- Functional application.
+- _Functional application._
 
-- GitHub repository with a unique name and a README describing the project.
+- _GitHub repository with a unique name and a README describing the project._
 
-- The command-line application should allow users to:
+- _The command-line application should allow users to:_
 
-  - Add departments, roles, employees
+  - _Add departments, roles, employees_
 
-  - View departments, roles, employees
+  - _View departments, roles, employees_
 
-  - Update employee roles
+  - _Update employee roles_
 
 ## Bonus
 
