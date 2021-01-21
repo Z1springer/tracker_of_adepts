@@ -12,9 +12,4 @@ const connection = mysql.createConnection({
   database: "adept_db",
 });
 
-connection.connect(function (err) {
-  if (err) throw err;
-  console.log("connected as id " + connection.threadId + "\n");
-});
-
-module.exports = Connection;
+module.exports = connection;
