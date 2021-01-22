@@ -88,7 +88,7 @@ How do you deliver this? Here are some guidelines:
 
 - _The command-line application should allow users to:_
 
-  - _Add departments, roles, employees_
+  - \_Add departments, roles, employees_X
 
   - _View departments, roles, employees_
 

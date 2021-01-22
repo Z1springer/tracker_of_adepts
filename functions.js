@@ -13,6 +13,7 @@ const start = () => {
         "Create/Delete Department",
         "Create/Delete Role",
         "Create/Delete Employee",
+        "Update Info",
         "View Employees",
       ],
     })
@@ -28,6 +29,9 @@ const start = () => {
           break;
         case "Create/Delete Employee":
           employCreate();
+          break;
+        case "Update Info":
+          updtRole();
           break;
         case "View Employees":
           viewCrew();
@@ -211,7 +215,84 @@ function employCreate() {
     });
 }
 // update department, role, employees
-
+function updtRole() {
+  connection.query("SELECT * FROM employee", function (err, emp) {
+    if (err) throw err;
+    // TODO: make another connection to make a list of possible roles
+    connection.query("SELECT * FROM role", function (err, res) {
+      if (err) throw err;
+      inquirer
+        .prompt([
+          {
+            // TODO: make a list of inquire questions that let you narrow down the list of employees
+            type: "list",
+            message: "Who's role would you like to update?",
+            name: "updtEmployeeName",
+            choices: emp.map((empler) => ({
+              name: empler.first_name + " " + empler.last_name,
+              value: empler.id,
+            })),
+          },
+          {
+            type: "list",
+            message: "What is the new role you want to give them?",
+            name: "updtNewRole",
+            choices: res.map((roler) => ({
+              name: roler.title,
+              value: roler.id,
+            })),
+          },
+        ])
+        .then((wut) => {
+          // TODO: make Another connection to update the role for the selected employee
+          console.log(
+            `[{ role_id: ${wut.updtNewRole} }, { id: ${wut.updtEmployeeName} }],`
+          );
+          connection.query(
+            "UPDATE employee SET ? WHERE ?",
+            [{ role_id: wut.updtNewRole }, { id: wut.updtEmployeeName }],
+            function (err, ret) {
+              if (err) throw err;
+              console.log("worked it did...");
+              start();
+            }
+          );
+        });
+    });
+  });
+}
+function viewCrew() {
+  inquirer
+    .prompt({
+      type: "list",
+      message: "What would you like to view?",
+      choices: ["Employees", "Roles", "Departments", "Back"],
+      name: "viewChoice",
+    })
+    .then((fun) => {
+      if (fun.viewChoice === "Employees") {
+        connection.query(
+          "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id AS employee, role.title FROM role LEFT JOIN employee ON employee.role_id = role.id ORDER BY id",
+          function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            viewCrew();
+          }
+        );
+      } else if (fun.viewChoice === "Roles") {
+        connection.query(
+          "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department ON role.department = department.id;",
+          function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            viewCrew();
+          }
+        );
+      } else if (fun.viewChoice === "Departments") {
+      } else {
+      }
+    });
+}
 // function logAndRestart(err, data) {
 //   if (err) {
 //     throw err;
