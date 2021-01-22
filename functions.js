@@ -82,11 +82,11 @@ function createRole() {
         {
           type: "list",
           message: "Please choose a department:",
-          name: "departName",
           choices: res.map((department) => ({
             name: department.name,
             value: department.id,
           })),
+          name: "departName",
         },
       ])
       .then((res) => {
@@ -120,42 +120,60 @@ function employCreate() {
     })
     .then((confirmation) => {
       if (confirmation.confirm === "Create") {
-        inquirer
-          .prompt([
-            {
-              type: "input",
-              message: "Employees' First Name:",
-              name: "first_name",
-              default: "Johan",
-            },
-            {
-              type: "input",
-              message: "Employees' Last Name",
-              name: "last_name",
-              default: "Schmitt",
-            },
-            {
-              type: "list",
-              message: "What is the role of this Employee?",
-            },
-          ])
-          .then((designation) => {
-            connection.query(
-              "INSERT INTO employee SET ?",
+        connection.query("INSERT INTO employee SET ?", function (err, res) {
+          inquirer
+            .prompt([
               {
-                first_name: designation.first_name,
-                last_name: designation.last_name,
+                type: "input",
+                message: "Employees' First Name:",
+                name: "first_name",
+                default: "Johan",
               },
-              function (err, data) {
-                if (err) {
-                  throw err;
-                } else {
-                  console.table(data);
-                  start();
+              {
+                type: "input",
+                message: "Employees' Last Name",
+                name: "last_name",
+                default: "Schmitt",
+              },
+              {
+                type: "list",
+                message: "What is the role of this Employee?",
+                choices: res.map((employee) => ({
+                  name: employee.title,
+                  value: employee.id,
+                })),
+                name: "role",
+              },
+              {
+                type: "list",
+                message: "Who is the Manager of this Employee?",
+                choices: res.filter((manager) => ({
+                  name: manager.name,
+                  value: manager.id,
+                })),
+                name: "manager",
+                default: "Already a Manager",
+              },
+            ])
+            .then((designation) => {
+              connection.query(
+                "INSERT INTO employee SET ?",
+                {
+                  first_name: designation.first_name,
+                  last_name: designation.last_name,
+                  role: employee.role,
+                },
+                function (err, data) {
+                  if (err) {
+                    throw err;
+                  } else {
+                    console.table(data);
+                    start();
+                  }
                 }
-              }
-            );
-          });
+              );
+            });
+        });
       } else {
         connection.query("SELECT * FROM employee", function (err, res) {
           if (err) throw err;
