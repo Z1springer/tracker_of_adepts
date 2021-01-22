@@ -26,7 +26,3 @@ CREATE TABLE employee(
     manager_id INT REFERENCES role(id),
     PRIMARY KEY(id)
 );
-
-
--- **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
--- **department_id** - INT to hold reference to department role belongs to
