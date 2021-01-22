@@ -37,9 +37,8 @@ const start = () => {
       }
     });
 };
-
 // functions to
-// add/remove department
+// FIXME: add/remove department
 function createDepart() {
   inquirer
     .prompt({
@@ -62,76 +61,128 @@ function createDepart() {
       );
     });
 }
-// add/remove role
+// FIXME: add/remove role
 function createRole() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "What is the role of this employee?",
-        name: "role",
-      },
-      {
-        type: "input",
-        message: "What is the salary of this role?",
-        name: "salary",
-      },
-    ])
-    .then((res) => {
-      connection.query(
-        "INSERT INTO department SET ?",
-        { title: res.title, salary: res.salary },
-        function (err, data) {
-          if (err) {
-            throw err;
-          } else {
-            console.table(data);
-            start();
+  connection.query("SELECT * FROM department;", function (err, res) {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Job Title:",
+          name: "role",
+          default: "Menial Worker",
+        },
+        {
+          type: "input",
+          message: "What is the salary of this role?",
+          name: "salary",
+          default: 0,
+        },
+        {
+          type: "list",
+          message: "Please choose a department:",
+          name: "departName",
+          choices: res.map((department) => ({
+            name: department.name,
+            value: department.id,
+          })),
+        },
+      ])
+      .then((res) => {
+        connection.query(
+          "INSERT INTO role SET ?",
+          {
+            title: res.role,
+            salary: res.salary,
+            department_id: res.departName,
+          },
+          function (err, data) {
+            if (err) {
+              throw err;
+            } else {
+              console.table(data);
+              start();
+            }
           }
-        }
-      );
-    });
+        );
+      });
+  });
 }
-// add/remove employees
-function createRole() {
+// FIXME: add/remove employees
+function employCreate() {
   inquirer
     .prompt({
       type: "list",
-      message: "Do you wish to Create or Delete a role?",
+      message: "Do you wish to Create or Delete an Employee?",
       choices: ["Create", "Delete"],
       name: "confirm",
     })
-    .then((solution) => {
-      inquirer
-        .prompt([
-          {
-            type: "input",
-            message: "Employees' First Name:",
-            name: "first_name",
-          },
-          {
-            type: "input",
-            message: "Employees' Last Name",
-            name: "last_name",
-          },
-        ])
-        .then((designation) => {
-          connection.query(
-            "INSERT INTO department SET ?",
+    .then((confirmation) => {
+      if (confirmation.confirm === "Create") {
+        inquirer
+          .prompt([
             {
-              first_name: designation.first_name,
-              last_name: designation.last_name,
+              type: "input",
+              message: "Employees' First Name:",
+              name: "first_name",
+              default: "Johan",
             },
-            function (err, data) {
-              if (err) {
-                throw err;
-              } else {
-                console.table(data);
-                start();
+            {
+              type: "input",
+              message: "Employees' Last Name",
+              name: "last_name",
+              default: "Schmitt",
+            },
+            {
+              type: "list",
+              message: "What is the role of this Employee?",
+            },
+          ])
+          .then((designation) => {
+            connection.query(
+              "INSERT INTO employee SET ?",
+              {
+                first_name: designation.first_name,
+                last_name: designation.last_name,
+              },
+              function (err, data) {
+                if (err) {
+                  throw err;
+                } else {
+                  console.table(data);
+                  start();
+                }
               }
-            }
-          );
+            );
+          });
+      } else {
+        connection.query("SELECT * FROM employee", function (err, res) {
+          if (err) throw err;
+          inquirer
+            .prompt({
+              type: "list",
+              message: "Please Choose the Employee you wish to Terminate",
+              choices: res.map((adept) => ({
+                name: adept.first_name + " " + adept.last_name,
+                value: adept.id,
+              })),
+              name: "delete",
+              default: "Johan Schmitt",
+            })
+            .then((input) => {
+              connection.query(
+                "DELETE FROM employee WHERE ?",
+                { id: input.delete },
+                function (err, res) {
+                  if (err) throw err;
+                  console.log("yay it works!");
+                  start();
+                }
+              );
+            });
         });
+      }
     });
 }
 // update department, role, employees
