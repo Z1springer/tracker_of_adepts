@@ -1,4 +1,4 @@
-// FIXME:  switch cases and functions within this file
+//  switch cases and functions within this file
 const inquirer = require("inquirer");
 const connection = require("./db/connection");
 require("console.table");
@@ -42,7 +42,7 @@ const start = () => {
     });
 };
 // functions to
-// FIXME: add/remove department
+// add department
 function createDepart() {
   inquirer
     .prompt({
@@ -65,7 +65,7 @@ function createDepart() {
       );
     });
 }
-// FIXME: add/remove role
+// add role
 function createRole() {
   connection.query("SELECT * FROM department;", function (err, res) {
     if (err) throw err;
@@ -113,7 +113,7 @@ function createRole() {
       });
   });
 }
-// FIXME: add/remove employees
+// add/remove employees
 function employCreate() {
   inquirer
     .prompt({
@@ -217,13 +217,13 @@ function employCreate() {
 function updtRole() {
   connection.query("SELECT * FROM employee", function (err, emp) {
     if (err) throw err;
-    // TODO: make another connection to make a list of possible roles
+    // a connection to make a list of possible roles
     connection.query("SELECT * FROM role", function (err, res) {
       if (err) throw err;
       inquirer
         .prompt([
           {
-            // TODO: make a list of inquire questions that let you narrow down the list of employees
+            // a list of inquire questions that let you narrow down the list of employees
             type: "list",
             message: "Who's role would you like to update?",
             name: "updtEmployeeName",
@@ -243,7 +243,7 @@ function updtRole() {
           },
         ])
         .then((wut) => {
-          // TODO: make Another connection to update the role for the selected employee
+          // Another connection to update the role for the selected employee
           console.log(
             `[{ role_id: ${wut.updtNewRole} }, { id: ${wut.updtEmployeeName} }],`
           );
@@ -260,6 +260,7 @@ function updtRole() {
     });
   });
 }
+// view all employees, roles, and departments
 function viewCrew() {
   inquirer
     .prompt({
@@ -298,12 +299,5 @@ function viewCrew() {
       }
     });
 }
-// function logAndRestart(err, data) {
-//   if (err) {
-//     throw err;
-//   } else {
-//     console.log(data);
-//     start();
-//   }
-// }
+
 start();
