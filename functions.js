@@ -161,7 +161,6 @@ function employCreate() {
                   message: "Who is the Manager of this Employee?",
                   choices: employeeList,
                   name: "manager",
-                  default: "Already a Manager",
                 },
               ])
               .then((designation) => {
@@ -289,7 +288,13 @@ function viewCrew() {
           }
         );
       } else if (fun.viewChoice === "Departments") {
+        connection.query("SELECT * FROM department", function (err, data) {
+          if (err) throw err;
+          console.table(data);
+          viewCrew();
+        });
       } else {
+        start();
       }
     });
 }
