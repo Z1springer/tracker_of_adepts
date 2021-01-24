@@ -48,21 +48,11 @@ So that I can organize and plan my business
 
 - jQuery
 
-## Minimum Requirements
+## Demo
 
-- _Functional application._
+https://drive.google.com/file/d/1bcabkeaxbmnuyVS3PCxmLsdSGKG8FPVv/view
 
-- _GitHub repository with a unique name and a README describing the project._
-
-- _The command-line application should allow users to:_
-
-  - \_Add departments, roles, employees_X
-
-  - _View departments, roles, employees_
-
-  - _Update employee roles_
-
-## Bonus
+## Future Development
 
 - The command-line application should allow users to:
 
@@ -73,11 +63,3 @@ So that I can organize and plan my business
   - Delete departments, roles, and employees
 
   - View the total utilized budget of a department -- ie the combined salaries of all employees in that department
-
-## Submission on BCS
-
-You are required to submit the following:
-
-- The URL of the GitHub repository
-
-- A video demonstrating the entirety of the app's functionality
